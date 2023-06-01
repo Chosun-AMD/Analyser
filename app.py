@@ -7,9 +7,6 @@ import requests
 import tempfile
 import zipfile
 
-from routers import *
-
-
 app = FastAPI(
     title='A.M.D Malware Classifier API',
     description='...',
@@ -43,11 +40,7 @@ app.openapi = openapi
 async def root():
     return RedirectResponse(url='/redoc')
 
-app.include_router(hardware_router)
-app.include_router(platform_router)
-app.include_router(version_router)
-app.include_router(scan_router)
-app.include_router(realtime_router)
+
 
 def download(url, filename):
     headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
@@ -68,6 +61,14 @@ if __name__ == '__main__':
     print('Downloading word index...')
     word_index_url = 'https://www.dropbox.com/sh/u1fhl6f9z1rha3u/AABlr2D9mFqm_DbmUWcb6Y0Pa?dl=0'
     download(word_index_url, 'word_index')
+
+    from routers import *
+
+    app.include_router(hardware_router)
+    app.include_router(platform_router)
+    app.include_router(version_router)
+    app.include_router(scan_router)
+    app.include_router(realtime_router)
 
     import uvicorn
     uvicorn.run("app:app", host='0.0.0.0', port=8000, reload=True)
