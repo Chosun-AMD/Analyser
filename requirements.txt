@@ -1,0 +1,14 @@
+tensorflow
+requests
+numpy
+pefile
+fastapi
+uvicorn
+py-cpuinfo
+psutil
+nvidia-ml-py3
+python-magic
+vt-py
+msgpack
+capstone
+python-multipart
