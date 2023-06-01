@@ -18,7 +18,7 @@ COPY . /app
 RUN pip install -r requirements.txt
 
 ENV MODELS_DIR /app/models
-ENV WORD_INDEXS_DIR /app/word_indexs
+ENV WORD_INDEXS_DIR /app/word_index
 RUN mkdir $MODELS_DIR
 RUN mkdir $WORD_INDEXS_DIR
 
