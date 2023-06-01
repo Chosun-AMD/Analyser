@@ -12,3 +12,4 @@ vt-py
 msgpack
 capstone
 python-multipart
+distro
