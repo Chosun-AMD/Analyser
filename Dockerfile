@@ -22,4 +22,4 @@ ENV WORD_INDEXS_DIR /app/word_index
 RUN mkdir $MODELS_DIR
 RUN mkdir $WORD_INDEXS_DIR
 
-CMD ["python", "app.py"]
+CMD ["python", "-muvicorn", "app:app"]
