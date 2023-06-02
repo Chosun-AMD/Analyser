@@ -7,6 +7,28 @@ import requests
 import tempfile
 import zipfile
 
+def download(url, filename):
+    headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
+    file = requests.get(url, headers=headers)
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        with open(tmpdirname + '/download.zip', 'wb') as f:
+            for chunk in file.iter_content(chunk_size=128):
+                f.write(chunk)
+        # Unzip model file
+        with zipfile.ZipFile(tmpdirname + '/download.zip', 'r') as zip_ref:
+            zip_ref.extractall(f'./{filename}')
+
+
+print('Downloading models...')
+model_url = 'https://www.dropbox.com/sh/lg9q6uyrkhgkmvf/AAB81SAKgbPbuJgFplwAUdb2a?dl=0'
+#download(model_url, 'models')
+
+print('Downloading word index...')
+word_index_url = 'https://www.dropbox.com/sh/u1fhl6f9z1rha3u/AABlr2D9mFqm_DbmUWcb6Y0Pa?dl=0'
+#download(word_index_url, 'word_index')
+
+from routers import *
+
 app = FastAPI(
     title='A.M.D Malware Classifier API',
     description='...',
@@ -36,39 +58,16 @@ def openapi():
 
 app.openapi = openapi
 
+app.include_router(hardware_router)
+app.include_router(platform_router)
+app.include_router(version_router)
+app.include_router(scan_router)
+app.include_router(realtime_router)
+
 @app.get('/', include_in_schema=False)
 async def root():
     return RedirectResponse(url='/redoc')
 
-
-
-def download(url, filename):
-    headers = {'user-agent': 'Wget/1.16 (linux-gnu)'}
-    file = requests.get(url, headers=headers)
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        with open(tmpdirname + '/download.zip', 'wb') as f:
-            for chunk in file.iter_content(chunk_size=128):
-                f.write(chunk)
-        # Unzip model file
-        with zipfile.ZipFile(tmpdirname + '/download.zip', 'r') as zip_ref:
-            zip_ref.extractall(f'./{filename}')
-
 if __name__ == '__main__':
-    print('Downloading models...')
-    model_url = 'https://www.dropbox.com/sh/lg9q6uyrkhgkmvf/AAB81SAKgbPbuJgFplwAUdb2a?dl=0'
-    download(model_url, 'models')
-
-    print('Downloading word index...')
-    word_index_url = 'https://www.dropbox.com/sh/u1fhl6f9z1rha3u/AABlr2D9mFqm_DbmUWcb6Y0Pa?dl=0'
-    download(word_index_url, 'word_index')
-
-    from routers import *
-
-    app.include_router(hardware_router)
-    app.include_router(platform_router)
-    app.include_router(version_router)
-    app.include_router(scan_router)
-    app.include_router(realtime_router)
-
     import uvicorn
     uvicorn.run("app:app", host='0.0.0.0', port=8000, reload=True)
