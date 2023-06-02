@@ -21,11 +21,11 @@ def download(url, filename):
 
 print('Downloading models...')
 model_url = 'https://www.dropbox.com/sh/lg9q6uyrkhgkmvf/AAB81SAKgbPbuJgFplwAUdb2a?dl=0'
-#download(model_url, 'models')
+download(model_url, 'models')
 
 print('Downloading word index...')
 word_index_url = 'https://www.dropbox.com/sh/u1fhl6f9z1rha3u/AABlr2D9mFqm_DbmUWcb6Y0Pa?dl=0'
-#download(word_index_url, 'word_index')
+download(word_index_url, 'word_index')
 
 from routers import *
 
