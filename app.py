@@ -19,13 +19,13 @@ def download(url, filename):
             zip_ref.extractall(f'./{filename}')
 
 
-print('Downloading models...')
-model_url = 'https://www.dropbox.com/sh/lg9q6uyrkhgkmvf/AAB81SAKgbPbuJgFplwAUdb2a?dl=0'
-download(model_url, 'models')
+# print('Downloading models...')
+# model_url = 'https://www.dropbox.com/sh/lg9q6uyrkhgkmvf/AAB81SAKgbPbuJgFplwAUdb2a?dl=0'
+# download(model_url, 'models')
 
-print('Downloading word index...')
-word_index_url = 'https://www.dropbox.com/sh/u1fhl6f9z1rha3u/AABlr2D9mFqm_DbmUWcb6Y0Pa?dl=0'
-download(word_index_url, 'word_index')
+# print('Downloading word index...')
+# word_index_url = 'https://www.dropbox.com/sh/u1fhl6f9z1rha3u/AABlr2D9mFqm_DbmUWcb6Y0Pa?dl=0'
+# download(word_index_url, 'word_index')
 
 from routers import *
 
@@ -65,7 +65,7 @@ app.include_router(scan_router)
 app.include_router(realtime_router)
 
 @app.get('/', include_in_schema=False)
-async def root():
+def root():
     return RedirectResponse(url='/redoc')
 
 if __name__ == '__main__':

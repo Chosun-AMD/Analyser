@@ -20,7 +20,7 @@ class file_info(BaseModel):
     sha256: str = Field(..., description="The sha256 of the file.", example='1234567890')
     md5: str = Field(..., description="The md5 of the file.", example='1234567890')
     sha1: str = Field(..., description="The sha1 of the file.", example='1234567890')
-    detects : List[detects_model] = Field(..., description="The detects of the file.", example=[])
+#    detects : List[detects_model] = Field(..., description="The detects of the file.", example=[])
 
 class vt_result(BaseModel):
     total_vendors: int = Field(..., description="The total vendors of the file.", example=70)
@@ -49,8 +49,8 @@ classifier = Classifier(models_dir=models_dir, word_indexs_dir=word_indexs_dir)
 tempdir = tempfile.gettempdir()
 
 @router.post('/upload', responses={200: {'description': 'Uploads a file to the server.'}}, response_model=upload_result, tags=['Scan'])
-async def upload_file(file: UploadFile = File(...)):
-    contents = await file.read()
+def upload_file(file: UploadFile = File(...)):
+    contents = file.file.read()
 
     with open(os.path.join(tempdir, file.filename), 'wb') as f:
         f.write(contents)
@@ -77,19 +77,19 @@ def validate_path(path: str = None):
         raise HTTPException(status_code=400, detail='File not invaild, please upload PE file.')
 
 @router.get('/info', responses={ 200: {'description': 'Get file info'}, 400:{'description': '`path` parameter is required.'}}, response_model=file_info, tags=['Scan'])
-async def info(path: str = None):
+def info(path: str = None):
     validate_path(path)
 
     info = classifier.file_info
-    detects = []
-    for detect in info['detects'][0]:
-        print(detect)
-        detects.append(detects_model(name=detect[0], type_version=detect[1]))
+  #  detects = []
+ #   for detect in info['detects'][0]:
+    #    print(detect)
+   #     detects.append(detects_model(name=detect[0], type_version=detect[1]))
 
-    return file_info(filesize=info['filesize'], sha256=info['sha256'], md5=info['md5'], sha1=info['sha1'], detects=detects)
+    return file_info(filesize=info['filesize'], sha256=info['sha256'], md5=info['md5'], sha1=info['sha1'])
 
 @router.get('/vt', responses={ 200: {'description': 'Get VirusTotal result of file'},}.update(responses), response_model=vt_result, tags=['Scan'])
-async def vt(path: str = None):
+def vt(path: str = None):
     validate_path(path)
 
     vt = classifier.vt_report
@@ -97,7 +97,7 @@ async def vt(path: str = None):
     return vt_result(total_vendors=vt['total_vendors'], malicious_vendors=vt['malicious_vendors'], threat_name=vt['threat_name'])
 
 @router.get('/mb', responses={ 200: {'description': 'Get MalwareBazaar result of file'},}.update(responses), response_model=mb_report, tags=['Scan'])
-async def mb(path: str = None):
+def mb(path: str = None):
     validate_path(path)
 
     mb = classifier.mb_report
@@ -105,7 +105,7 @@ async def mb(path: str = None):
     return mb_report(signature=mb['signature'], threat_name=mb['threat_name'])
 
 @router.get('/prediction', responses={ 200: {'description': 'Get prediction result of file'},}.update(responses), response_model=prediction_result, tags=['Scan'])
-async def prediction(path: str = None):
+def prediction(path: str = None):
     validate_path(path)
 
     prediction = classifier.predict

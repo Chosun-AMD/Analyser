@@ -26,19 +26,19 @@ model_info = ModelInformation()
 
 
 @router.get('/python', responses={200: {'description': 'Returns the library information.'}}, response_model=python_model, tags=['Library'])
-async def get_python():
+def get_python():
     return python_model(
         version=lib_info.python_version
     )
 
 @router.get('/tf', responses={200: {'description': 'Returns the library information.'}}, response_model=tf_model, tags=['Library'])
-async def get_tensorflow():
+def get_tensorflow():
     return tf_model(
         version=lib_info.tf_version
     )
 
 @router.get('/models', responses={200: {'description': 'Returns the library information.'}}, response_model=models_model, tags=['Library'])
-async def get_model():
+def get_model():
     return models_model(
         models=model_info.models
     )

@@ -96,5 +96,5 @@ class Classifier:
     def file_info(self):
         info = {'filesize': os.path.getsize(self.file)}
         info.update(self.hashes)
-        info.update(self.diec)
+        #info.update(self.diec)
         return info

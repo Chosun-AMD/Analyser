@@ -21,7 +21,7 @@ platform = PlatformInformation()
 router = APIRouter(prefix='/platform')
 
 @router.get('/', responses={200: {'description': 'Returns the platform information.'}}, response_model=platform_model, tags=['Platform'])
-async def get_platform():
+def get_platform():
     return platform_model(
         system=platform.system,
         version=platform.version,
@@ -31,7 +31,7 @@ async def get_platform():
     )
 
 @router.get('/ip', responses={200: {'description': 'Returns the platform IP information.'}}, response_model=ip_model, tags=['Platform'])
-async def get_platform_ip():
+def get_platform_ip():
     return ip_model(
         internal=platform.internal_ip,
         external=platform.external_ip

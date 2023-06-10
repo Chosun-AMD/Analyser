@@ -23,19 +23,19 @@ router = APIRouter(prefix='/realtime')
 sys_info = RealtimeSystemInformation()
 
 @router.get('/cpu', responses={200: {'description': 'Returns the system information.'}}, response_model=cpu_model, tags=['Realtime'])
-async def get_cpu():
+def get_cpu():
     return cpu_model(
         usage=sys_info.cpu
     )
 
 @router.get('/mem', responses={200: {'description': 'Returns the system information.'}}, response_model=mem_model, tags=['Realtime'])
-async def get_mem():
+def get_mem():
     return mem_model(
         usage=sys_info.mem
     )
 
 @router.get('/disks', responses={200: {'description': 'Returns the system information.'}}, response_model=disks_model, tags=['Realtime'])
-async def get_disks():
+def get_disks():
     result = []
 
     for disk in sys_info.disks:

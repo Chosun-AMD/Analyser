@@ -32,7 +32,7 @@ hwinfo = HardwareInformation()
 router = APIRouter(prefix='/hardware')
 
 @router.get('/cpu', responses={200: {'description': 'Returns the CPU information.'}}, response_model=cpu_model, tags=['Hardware'])
-async def get_cpu():
+def get_cpu():
     processor, core = hwinfo.processor
     arch = hwinfo.arch
     return cpu_model(
@@ -42,12 +42,12 @@ async def get_cpu():
     )
 
 @router.get('/memory', responses={200: {'description': 'Returns the memory information.'}}, response_model=memory_model, tags=['Hardware'])
-async def get_memory():
+def get_memory():
     mem = hwinfo.mem
     return memory_model(memory=mem)
 
 @router.get('/disks', responses={200: {'description': 'Returns the disk information.'}}, response_model=disks_model, tags=['Hardware'])
-async def get_disks():
+def get_disks():
     result = disks_model(disks=[])
     for _disk in hwinfo.partitions:
         mountpoint, size = _disk
@@ -55,7 +55,7 @@ async def get_disks():
     return result
 
 @router.get('/gpu', responses={200: {'description': 'Returns the GPU information.'}, 404: {'description': 'This sytsem does not hava NVIDIA GPU'}}, response_model=gpus_model, tags=['Hardware'])
-async def get_gpu():
+def get_gpu():
     result = gpus_model(gpus=[])  # Assign an empty list directly
     for _gpu in hwinfo.gpus:
         name, memory = _gpu
